@@ -6,7 +6,13 @@ public class Calculator {
         return a - b;
     }
     public int div(int a, int b){
+
+        if (b == 0) {
+            throw new ArithmeticException("Деление на ноль!");
+        }
+
         if (b == 0) return 0; // Базовая проверка на ноль
+
         return a / b;
     }
     public int times(int a, int b){
@@ -14,9 +20,17 @@ public class Calculator {
     }
 
     public int solver(){
+
+        int step1 = add(5, 3);
+        int step2 = times(step1, 2);
+        int step3 = div(4, 2);
+        int result = dif(step2, step3);
+        return result;
+
         int step1 = add(10, 5);      // 15
         int step2 = times(step1, 2);  // 30
         int step3 = div(20, 4);      // 5
         return dif(step2, step3);    // 25
+
     }
 }
