@@ -18,42 +18,40 @@ public class Calculator {
         return a * b;
     }
     
-    // Деление (исправлено)
+    // Деление — должно кидать исключение при делении на 0
     public int div(int a, int b) {
         if (b == 0) {
-            return 0;  // или throw new ArithmeticException("/ by zero")
+            throw new ArithmeticException("/ by zero");
         }
         return a / b;
     }
     
-    // Решение квадратного уравнения (исправлено)
+    // Решение квадратного уравнения
     public List<Integer> solver(int a, int b, int c) {
         List<Integer> roots = new ArrayList<>();
         
         int discriminant = b * b - 4 * a * c;
         
         if (discriminant < 0) {
-            return roots;  // пустой список
-        } 
+            // Нет корней — возвращаем [-1]
+            roots.add(-1);
+            return roots;
+        }
         
         if (discriminant == 0) {
+            // Один корень
             int root = -b / (2 * a);
             roots.add(root);
-        } else {
-            // Важно: порядок добавления корней
-            // Обычно сначала меньший, потом больший
-            int root1 = (int) ((-b - Math.sqrt(discriminant)) / (2 * a));
-            int root2 = (int) ((-b + Math.sqrt(discriminant)) / (2 * a));
-            
-            // Сортируем, чтобы порядок был стабильным
-            if (root1 <= root2) {
-                roots.add(root1);
-                roots.add(root2);
-            } else {
-                roots.add(root2);
-                roots.add(root1);
-            }
+            return roots;
         }
+        
+        // Два корня
+        double sqrtD = Math.sqrt(discriminant);
+        int root1 = (int) ((-b - sqrtD) / (2 * a));
+        int root2 = (int) ((-b + sqrtD) / (2 * a));
+        
+        roots.add(root1);
+        roots.add(root2);
         
         return roots;
     }
