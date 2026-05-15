@@ -6,11 +6,12 @@ on:
   pull_request:
     branches: [ "main" ]
   schedule:
-    - cron: '30 12 * * 3'
-    - cron: '0 22 * * 5'
+    - cron: '30 12 * * 3'   # каждую среду в 12:30 UTC
+    - cron: '0 22 * * 5'     # каждую пятницу в 22:00 UTC
 
 jobs:
   build:
+    name: ${{ matrix.os }} / Java ${{ matrix.java }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -19,21 +20,16 @@ jobs:
       fail-fast: false
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up JDK ${{ matrix.java }}
-      uses: actions/setup-java@v4
-      with:
-        java-version: ${{ matrix.java }}
-        distribution: 'zulu'
-    
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
-      with:
-        gradle-version: '8.5'   # <--- ДОБАВИТЬ ЭТУ СТРОКУ
-    
-    - name: Make gradlew executable
-      run: chmod +x gradlew
-    
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build --no-daemon
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'zulu'     # Позволяет использовать Java 13
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build --no-daemon
